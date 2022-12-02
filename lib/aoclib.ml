@@ -1,0 +1,1 @@
+let print_day a = Printf.printf "Hello, today is day %d\n" a
