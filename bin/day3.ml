@@ -92,36 +92,19 @@ let shared3 ((left, middle, right) : string * string * string) : char =
   in
   Option.get maybe_found
 
-let input (input_file : string) : string list =
-  let contents = In_channel.with_open_bin input_file In_channel.input_all in
-  contents |> String.split_on_char '\n' |> List.filter (fun s -> s <> "")
-
 let () =
-  run_test_tt_main
-    ("All tests"
-    >::: [
-           split_string_half_tests;
-           shared_element_tests;
-           priority_tests;
-           group3_tests;
-         ]);
-  print_endline "test data part 1";
-  print_int
-    ("inputs/day_3_demo.txt" |> input |> List.map split_string_half
-   |> List.map shared_element |> List.map priority |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "part 1";
-  print_int
-    ("inputs/day_3.txt" |> input |> List.map split_string_half
-   |> List.map shared_element |> List.map priority |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "test data part 2";
-  print_int
-    ("inputs/day_3_demo.txt" |> input |> group3 |> List.map shared3
-   |> List.map priority |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "part 1";
-  print_int
-    ("inputs/day_3.txt" |> input |> group3 |> List.map shared3
-   |> List.map priority |> List.fold_left ( + ) 0);
-  print_newline ()
+  Aoclib.aoc
+    ~tests:
+      [
+        split_string_half_tests;
+        shared_element_tests;
+        priority_tests;
+        group3_tests;
+      ]
+    ~part1:(fun input ->
+      input |> Aoclib.lines |> List.map split_string_half
+      |> List.map shared_element |> List.map priority |> List.fold_left ( + ) 0)
+    ~part2:(fun input ->
+      input |> Aoclib.lines |> group3 |> List.map shared3 |> List.map priority
+      |> List.fold_left ( + ) 0)
+    3
