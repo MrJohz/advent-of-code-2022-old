@@ -1,9 +1,3 @@
-let input =
-  let contents =
-    In_channel.with_open_bin "inputs/day_1.txt" In_channel.input_all
-  in
-  contents |> String.split_on_char '\n' |> List.map int_of_string_opt
-
 let group (input : 'a option list) : 'a list list =
   let rec grouping all_lists current_list = function
     | [] -> List.rev (List.rev current_list) :: all_lists
@@ -26,18 +20,15 @@ let largest_three (input : int list) =
       else (acc1, acc2, acc3))
     (0, 0, 0) input
 
-let part_1 () =
-  let n = input |> group |> sum_groups |> largest in
-  print_int n;
-  print_newline ()
+let part_1 (input : string) : int =
+  input |> String.split_on_char '\n' |> List.map int_of_string_opt |> group
+  |> sum_groups |> largest
 
-let part_2 () =
-  let n1, n2, n3 = input |> group |> sum_groups |> largest_three in
-  print_int (n1 + n2 + n3);
-  print_newline ()
+let part_2 (input : string) : int =
+  let n1, n2, n3 =
+    input |> String.split_on_char '\n' |> List.map int_of_string_opt |> group
+    |> sum_groups |> largest_three
+  in
+  n1 + n2 + n3
 
-let () =
-  print_endline "part 1";
-  part_1 ();
-  print_endline "part 2";
-  part_2 ()
+let () = Aoclib.aoc ~part1:part_1 ~part2:part_2 1

@@ -24,16 +24,6 @@ let parse_move (theirs : string) (ours : string) : movepair =
   | "Z" -> (theirs, wins theirs)
   | _ -> failwith "unknown move for us"
 
-let input (parse_fn : string -> string -> movepair) (input_file : string) :
-    movepair list =
-  let contents = In_channel.with_open_bin input_file In_channel.input_all in
-  contents |> String.split_on_char '\n'
-  |> List.filter (fun s -> String.length s != 0)
-  |> List.map (String.split_on_char ' ')
-  |> List.map (function
-       | [ theirs; ours ] -> parse_fn theirs ours
-       | _ -> failwith "invalid input when mapping list")
-
 let score ((theirs, ours) : movepair) : int =
   let move_score = match ours with Rock -> 1 | Paper -> 2 | Scissors -> 3 in
   let win_score =
@@ -45,23 +35,19 @@ let score ((theirs, ours) : movepair) : int =
   move_score + win_score
 
 let () =
-  print_endline "test data part 1";
-  print_int
-    ("inputs/day_2_demo.txt" |> input parse_move_naive |> List.map score
-   |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "part 1";
-  print_int
-    ("inputs/day_2.txt" |> input parse_move_naive |> List.map score
-   |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "test data part 2";
-  print_int
-    ("inputs/day_2_demo.txt" |> input parse_move |> List.map score
-   |> List.fold_left ( + ) 0);
-  print_newline ();
-  print_endline "part 2";
-  print_int
-    ("inputs/day_2.txt" |> input parse_move |> List.map score
-   |> List.fold_left ( + ) 0);
-  print_newline ()
+  Aoclib.aoc
+    ~part1:(fun input ->
+      input |> Aoclib.lines
+      |> List.map (String.split_on_char ' ')
+      |> List.map (function
+           | [ theirs; ours ] -> parse_move_naive theirs ours
+           | _ -> failwith "invalid input when mapping list")
+      |> List.map score |> List.fold_left ( + ) 0)
+    ~part2:(fun input ->
+      input |> Aoclib.lines
+      |> List.map (String.split_on_char ' ')
+      |> List.map (function
+           | [ theirs; ours ] -> parse_move theirs ours
+           | _ -> failwith "invalid input when mapping list")
+      |> List.map score |> List.fold_left ( + ) 0)
+    2
