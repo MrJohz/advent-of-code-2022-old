@@ -9,3 +9,9 @@
  (name day2)
  (modules day2)
  (libraries aoclib))
+
+(executable
+ (public_name day3)
+ (name day3)
+ (modules day3)
+ (libraries aoclib ounit2))
