@@ -15,3 +15,9 @@
  (name day3)
  (modules day3)
  (libraries aoclib ounit2))
+
+(executable
+ (public_name day4)
+ (name day4)
+ (modules day4)
+ (libraries aoclib ounit2))
