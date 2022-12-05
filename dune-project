@@ -19,7 +19,7 @@
  (name aoc)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune ounit2)
+ (depends ocaml dune ounit2 re)
  (tags
   (topics "to describe" your project)))
 
