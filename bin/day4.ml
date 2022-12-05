@@ -86,11 +86,13 @@ let () =
       |> List.fold_left
            (fun acc (left, right) ->
              if contains left right || contains right left then acc + 1 else acc)
-           0)
+           0
+      |> string_of_int)
     ~part2:(fun input ->
       input |> Aoclib.lines |> List.map parse
       |> List.fold_left
            (fun acc (left, right) ->
              if overlap left right then acc + 1 else acc)
-           0)
+           0
+      |> string_of_int)
     4

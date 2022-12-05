@@ -42,12 +42,12 @@ let () =
       |> List.map (function
            | [ theirs; ours ] -> parse_move_naive theirs ours
            | _ -> failwith "invalid input when mapping list")
-      |> List.map score |> List.fold_left ( + ) 0)
+      |> List.map score |> List.fold_left ( + ) 0 |> string_of_int)
     ~part2:(fun input ->
       input |> Aoclib.lines
       |> List.map (String.split_on_char ' ')
       |> List.map (function
            | [ theirs; ours ] -> parse_move theirs ours
            | _ -> failwith "invalid input when mapping list")
-      |> List.map score |> List.fold_left ( + ) 0)
+      |> List.map score |> List.fold_left ( + ) 0 |> string_of_int)
     2

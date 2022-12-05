@@ -13,8 +13,9 @@ let open_file (filename : string) : string =
   In_channel.with_open_bin filename In_channel.input_all
 
 let aoc ?(tests : OUnit2.test list = [])
-    ?(part1 : string -> int = int_of_string)
-    ?(part2 : string -> int = int_of_string) (day : int) =
+    ?(part1 : string -> string = fun _ -> failwith "not implemented")
+    ?(part2 : string -> string = fun _ -> failwith "not implemented")
+    (day : int) =
   let do_action (action : action) =
     print_newline ();
     match action with
@@ -24,19 +25,19 @@ let aoc ?(tests : OUnit2.test list = [])
           (OUnit2.( >::: ) (Printf.sprintf "Tests for day %d" day) tests)
     | Part1Demo ->
         Printf.printf "Running part 1 against demo input for day %d:\n" day;
-        Printf.printf "%d\n"
+        Printf.printf "%s\n"
           (part1 (open_file (Printf.sprintf "inputs/day_%d_demo.txt" day)))
     | Part1 ->
         Printf.printf "Running part 1 against real input for day %d:\n" day;
-        Printf.printf "%d\n"
+        Printf.printf "%s\n"
           (part1 (open_file (Printf.sprintf "inputs/day_%d.txt" day)))
     | Part2Demo ->
         Printf.printf "Running part 2 against demo input for day %d:\n" day;
-        Printf.printf "%d\n"
+        Printf.printf "%s\n"
           (part2 (open_file (Printf.sprintf "inputs/day_%d_demo.txt" day)))
     | Part2 ->
         Printf.printf "Running part 2 against real input for day %d:\n" day;
-        Printf.printf "%d\n"
+        Printf.printf "%s\n"
           (part2 (open_file (Printf.sprintf "inputs/day_%d.txt" day)))
   in
 

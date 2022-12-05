@@ -3,10 +3,18 @@ open OUnit2
 type stack = char list
 type stacks = stack list
 type command = { count : int; from_col : int; to_col : int }
+type popstyle = OneAtATime | AllAtOnce
 
 let string_of_command ({ count; from_col; to_col } : command) =
   Printf.sprintf "{ count = %d; from_col = %d; to_col = %d }" count from_col
     to_col
+
+let string_of_stack (stacks : stacks) : string =
+  String.concat "\n"
+    (List.map
+       (fun stack ->
+         stack |> List.rev |> List.map (String.make 1) |> String.concat " ")
+       stacks)
 
 let parse_single_row (input : string) : stacks =
   let rec parse_single_row (input : string) (pos : int) (row : stacks) : stacks
@@ -123,7 +131,50 @@ let parse (input : string list) : stacks * command list =
   let commands = List.map parse_command commands in
   (stacks, commands)
 
+let popn ?(pop_style : popstyle = AllAtOnce) (n : int) l =
+  let mayberev =
+    match pop_style with AllAtOnce -> List.rev | OneAtATime -> fun a -> a
+  in
+  let rec popn n acc l =
+    match l with
+    | [] -> failwith "cannot pop from empty list"
+    | head :: tail when n <= 1 -> (mayberev (head :: acc), tail)
+    | head :: tail -> popn (n - 1) (head :: acc) tail
+  in
+  popn n [] l
+
+let perform_commands (crane : int -> 'a list -> 'a list * 'a list)
+    (commands : command list) (stacks : stacks) : stacks =
+  let apply_command (stacks : stacks) (command : command) =
+    let popped, new_from_stack =
+      crane command.count (List.nth stacks (command.from_col - 1))
+    in
+    let new_to_stack = popped @ List.nth stacks (command.to_col - 1) in
+    List.mapi
+      (fun idx stack ->
+        if idx == command.from_col - 1 then new_from_stack
+        else if idx == command.to_col - 1 then new_to_stack
+        else stack)
+      stacks
+  in
+  let rec perform_commands stacks commands =
+    match commands with
+    | [] -> stacks
+    | head :: commands -> perform_commands (apply_command stacks head) commands
+  in
+  perform_commands stacks commands
+
 let () =
   Aoclib.aoc
     ~tests:[ parse_single_row_tests; combine_stacks_tests; parse_command_tests ]
-    4
+    ~part1:(fun input ->
+      let stacks, commands = input |> Aoclib.lines |> parse in
+      stacks
+      |> perform_commands (popn ~pop_style:OneAtATime) commands
+      |> string_of_stack)
+    ~part2:(fun input ->
+      let stacks, commands = input |> Aoclib.lines |> parse in
+      stacks
+      |> perform_commands (popn ~pop_style:AllAtOnce) commands
+      |> string_of_stack)
+    5

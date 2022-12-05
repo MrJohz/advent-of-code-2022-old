@@ -103,8 +103,9 @@ let () =
       ]
     ~part1:(fun input ->
       input |> Aoclib.lines |> List.map split_string_half
-      |> List.map shared_element |> List.map priority |> List.fold_left ( + ) 0)
+      |> List.map shared_element |> List.map priority |> List.fold_left ( + ) 0
+      |> string_of_int)
     ~part2:(fun input ->
       input |> Aoclib.lines |> group3 |> List.map shared3 |> List.map priority
-      |> List.fold_left ( + ) 0)
+      |> List.fold_left ( + ) 0 |> string_of_int)
     3

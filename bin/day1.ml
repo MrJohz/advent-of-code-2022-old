@@ -20,15 +20,15 @@ let largest_three (input : int list) =
       else (acc1, acc2, acc3))
     (0, 0, 0) input
 
-let part_1 (input : string) : int =
+let part_1 (input : string) : string =
   input |> String.split_on_char '\n' |> List.map int_of_string_opt |> group
-  |> sum_groups |> largest
+  |> sum_groups |> largest |> string_of_int
 
-let part_2 (input : string) : int =
+let part_2 (input : string) : string =
   let n1, n2, n3 =
     input |> String.split_on_char '\n' |> List.map int_of_string_opt |> group
     |> sum_groups |> largest_three
   in
-  n1 + n2 + n3
+  string_of_int (n1 + n2 + n3)
 
 let () = Aoclib.aoc ~part1:part_1 ~part2:part_2 1
