@@ -33,3 +33,9 @@
  (name day6)
  (modules day6)
  (libraries aoclib ounit2))
+
+(executable
+ (public_name day7)
+ (name day7)
+ (modules day7)
+ (libraries aoclib ounit2 re))
